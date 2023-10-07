@@ -15,5 +15,6 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: src/RP.Testing.sln
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build RP.Testing.sln --no-restore

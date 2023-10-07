@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RP.Core", "RP.Core\RP.Core.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RP.Business", "RP.Business\RP.Business.csproj", "{9C18E671-59E6-405C-9B68-098BE87D1A65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{531845B5-C979-4695-9A0A-C0FAA364C5C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RP.Tests", "Tests\RP.Tests.csproj", "{531845B5-C979-4695-9A0A-C0FAA364C5C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

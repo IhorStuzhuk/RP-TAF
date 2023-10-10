@@ -11,6 +11,9 @@ namespace RP.Core.Logging
 
         public FileLogger()
         {
+            if(File.Exists(LOG_FILE_PATH))
+                File.Delete(LOG_FILE_PATH);
+
             logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.File(LOG_FILE_PATH)

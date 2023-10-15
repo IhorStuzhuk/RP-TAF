@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/reportportal/agent-net-nunit/master/src/ReportPortal.NUnitExtension/ReportPortal.config.schema",
+  "enabled": true,
+  "server": {
+    "url": "https://reportportal.epam.com",
+    "project": "IHOR_STUZHUK_PERSONAL",
+    "authentication": {
+      "uuid": "c54486ce-b159-4fd6-a97c-970af78210ea"
+    }
+  },
+  "launch": {
+    "name": "RP tests",
+    "description": "",
+    "debugMode": true,
+    "attributes": [ "RPTests" ]
+  },
+  "rootNamespaces": [ "RP.Tests.dll", "RP", "Tests" ]
+}

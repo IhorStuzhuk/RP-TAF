@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RP.Core.API;
+using RP.Core.Models;
 
 namespace RP.Tests
 {
@@ -25,12 +26,12 @@ namespace RP.Tests
             return services.BuildServiceProvider();
         }
 
-        private void RegisterHttpClients(ServiceCollection services, IConfigurationSection section)
+        private void RegisterHttpClients(ServiceCollection services, IConfigurationSection apiSettingsSection)
         {
-            services.Configure<ApiSettings>(section);
+            services.Configure<ApiSettings>(apiSettingsSection);
             services.AddSingleton(p => p.GetRequiredService<IOptions<ApiSettings>>().Value);
 
-            services.AddSingleton(p => new RPHttpClient(p.GetService<ApiSettings>()));
+            services.AddHttpClient<DashboardApiClient>();
         }
     }
 }

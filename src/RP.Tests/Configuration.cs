@@ -9,6 +9,6 @@ namespace RP.Tests
 
         private static ServiceProvider Instance => Provider.Value;
 
-        public static RPHttpClient RPHttpClient => Instance.GetService<RPHttpClient>();
+        public static DashboardApiClient DashboardApiClient => Instance.GetService<DashboardApiClient>();
     }
 }

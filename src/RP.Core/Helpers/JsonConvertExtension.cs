@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace RP.Core.API.Helpers
+namespace RP.Core.Helpers
 {
     internal class JsonConvertExtension
     {

@@ -12,37 +12,49 @@ namespace RP.Core.API
 
         public DashboardApiClient(HttpClient httpClient, IOptions<ApiSettings> apiSettings)
         {
-            httpClient.BaseAddress = new Uri(apiSettings.Value.Host + "/api/v1/");
+            httpClient.BaseAddress = new Uri(apiSettings.Value.Host + $"/api/v1/{apiSettings.Value.ProjectName}/dashboard/");
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "name_pgbM9iU3SmG-7DiTmNnKRwSJZd5zH85RqfUtkuJMhX08CkRcMc5jlrkPdMIpCtA6");
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiSettings.Value.BearerToken);
             _httpClient = httpClient;
         }
 
-        public async Task<HttpResponseMessage> CreateDashboard(string projectName, DashboardDto dashboard)
+        public async Task<HttpResponseMessage> CreateDashboard(DashboardDto dashboard)
         {
-            return await _httpClient.PostJson($"{projectName}/dashboard", dashboard);
+            return await _httpClient.PostJson(_httpClient.BaseAddress.ToString(), dashboard);
         }
 
-        public async Task<HttpResponseMessage> GetDashboardById(string projectName, int id)
+        public async Task<HttpResponseMessage> GetDashboardById(int id)
         {
-            return await _httpClient.GetAsync($"{projectName}/dashboard/{id}");
+            return await _httpClient.GetAsync(id.ToString());
         }
 
-        public async Task<HttpResponseMessage> GetAllDashboards(string projectName)
+        public async Task<HttpResponseMessage> GetAllDashboards()
         {
-            return await _httpClient.GetAsync($"{projectName}/dashboard");
+            return await _httpClient.GetAsync(_httpClient.BaseAddress.ToString());
         }
 
-        public async Task<HttpResponseMessage> DeleteDashboardById(string projectName, int id)
+        public async Task<HttpResponseMessage> DeleteDashboardById(int id)
         {
-            return await _httpClient.DeleteAsync($"{projectName}/dashboard/{id}");
+            return await _httpClient.DeleteAsync(id.ToString());
         }
 
-
-        public async Task<HttpResponseMessage> UpdateDashboardById(string projectName, int id, DashboardDto dashboardToUpdate)
+        public async Task<HttpResponseMessage> UpdateDashboardById(int id, DashboardDto dashboardToUpdate)
         {
-            return await _httpClient.PutJson($"{projectName}/dashboard/{id}", dashboardToUpdate);
+            return await _httpClient.PutJson(id.ToString(), dashboardToUpdate);
+        }
+
+        public async Task DeleteAllCreatedDashboards()
+        {
+            var response = await GetAllDashboards();
+            var dashboards = response.GetContentAs<DashboardResponceDto>().Dashboards;
+            if(dashboards.Count > 0)
+                foreach(var db in dashboards)
+                {
+                    response = await DeleteDashboardById(db.Id);
+                    if(!response.IsSuccessStatusCode)
+                        throw new HttpRequestException($"Dashboard with id: {db.Id} was not deleted");
+                }
         }
     }
 }

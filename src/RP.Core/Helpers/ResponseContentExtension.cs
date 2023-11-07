@@ -1,4 +1,4 @@
-﻿namespace RP.Core.API.Helpers
+﻿namespace RP.Core.Helpers
 {
     public static class ResponseContentExtension
     {

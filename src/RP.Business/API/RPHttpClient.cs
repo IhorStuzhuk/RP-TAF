@@ -1,4 +1,4 @@
-﻿namespace RP.Core.API
+﻿namespace RP.Business.API
 {
     public class RPHttpClient
     {

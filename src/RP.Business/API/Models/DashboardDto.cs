@@ -1,4 +1,4 @@
-﻿namespace RP.Business.Models
+﻿namespace RP.Business.API.Models
 {
     public class DashboardDto
     {

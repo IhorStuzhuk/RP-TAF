@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace RP.Core.API.Helpers
+namespace RP.Core.Helpers
 {
     internal static class HttpClientExtensions
     {

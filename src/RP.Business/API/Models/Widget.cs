@@ -1,4 +1,4 @@
-﻿namespace RP.Business.Models
+﻿namespace RP.Business.API.Models
 {
     public class Widget
     {
@@ -8,7 +8,7 @@
 
         public string Type { get; set; }
 
-        public Options Options{ get; set; }
+        public Options Options { get; set; }
 
         public Size Size { get; set; }
 

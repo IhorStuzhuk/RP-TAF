@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using RP.Business.Models;
-using RP.Core.TestDataProviders;
-using RP.Core.API.Helpers;
+using RP.Business.API.Models;
+using RP.Core.Helpers;
+using RP.Tests.TestDataProviders;
 using System.Net;
 using Xunit;
 using TheoryAttribute = Xunit.TheoryAttribute;

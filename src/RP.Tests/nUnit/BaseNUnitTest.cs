@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using RP.Business.Models;
-using RP.Core.API.Helpers;
+using RP.Business.API.Models;
+using RP.Core.Helpers;
 using System.Net;
 
 [assembly: LevelOfParallelism(3)]

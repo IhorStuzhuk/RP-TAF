@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
-using RP.Business.Models;
-using RP.Core.API.Helpers;
+using RP.Business.API.Models;
+using RP.Core.Helpers;
 using System.Net;
-using Xunit;
 
 namespace RP.Tests.xUnit
 {

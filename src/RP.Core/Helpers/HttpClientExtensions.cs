@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using RP.Core.Helpers;
 
-namespace RP.Core.API.Helpers
+namespace RP.Core.Helpers
 {
     public static class HttpClientExtensions
     {

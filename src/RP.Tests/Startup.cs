@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using RP.Core.API;
-using RP.Core.Models;
+using RP.Business.API;
 
 namespace RP.Tests
 {

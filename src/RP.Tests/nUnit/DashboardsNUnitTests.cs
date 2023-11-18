@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using RP.Business.Models;
-using RP.Core.API.Helpers;
-using RP.Core.TestDataProviders;
+using RP.Business.API.Models;
+using RP.Core.Helpers;
+using RP.Tests.TestDataProviders;
 using System.Net;
 
 namespace RP.Tests.nUnit

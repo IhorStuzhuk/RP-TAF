@@ -1,4 +1,4 @@
-﻿namespace RP.Core.Models
+﻿namespace RP.Business.Models
 {
     public class UserConfig
     {

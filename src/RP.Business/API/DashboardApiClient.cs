@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
-using RP.Business.Models;
-using RP.Core.API.Helpers;
-using RP.Core.Models;
+using RP.Business.API.Models;
+using RP.Core.Helpers;
 using System.Net.Http.Headers;
 
-namespace RP.Core.API
+namespace RP.Business.API
 {
     public class DashboardApiClient
     {

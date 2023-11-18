@@ -1,7 +1,7 @@
 using FluentAssertions;
-using RP.Business.Models;
-using RP.Core.API;
-using RP.Core.API.Helpers;
+using RP.Business.API;
+using RP.Business.API.Models;
+using RP.Core.Helpers;
 using System.Net;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;

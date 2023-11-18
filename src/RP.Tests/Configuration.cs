@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using RP.Core.API;
+using RP.Business.API;
 
 namespace RP.Tests
 {

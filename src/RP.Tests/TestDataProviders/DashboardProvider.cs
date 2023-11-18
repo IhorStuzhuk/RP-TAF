@@ -1,7 +1,7 @@
-﻿using RP.Business.Models;
+﻿using RP.Business.API.Models;
 using RP.Core.Helpers;
 
-namespace RP.Core.TestDataProviders
+namespace RP.Tests.TestDataProviders
 {
     public class DashboardProvider
     {

@@ -1,6 +1,4 @@
-﻿using NUnit.Framework.Internal;
-using NUnit.Framework;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 
 namespace RP.Tests.BDD.Hooks
 {
@@ -10,7 +8,7 @@ namespace RP.Tests.BDD.Hooks
         [AfterFeature]
         public static async Task AfterFeature()
         {
-            await Configuration.DashboardApiClient.DeleteAllCreatedDashboards();
+            await Configuration.DashboardApiService.DeleteAllCreatedDashboards();
         }
     }
 }

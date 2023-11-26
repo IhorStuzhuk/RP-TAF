@@ -11,7 +11,7 @@
             DeleteAllCreatedDashboards();
         }
 
-        private async void DeleteAllCreatedDashboards() => await Configuration.DashboardApiClient.DeleteAllCreatedDashboards();
+        private async void DeleteAllCreatedDashboards() => await Configuration.DashboardApiService.DeleteAllCreatedDashboards();
     }
 }
 

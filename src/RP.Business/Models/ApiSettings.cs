@@ -1,4 +1,4 @@
-﻿namespace RP.Business.API
+﻿namespace RP.Business.Models
 {
     public class ApiSettings
     {

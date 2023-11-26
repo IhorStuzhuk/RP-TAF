@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RP.Business.API;
+using RP.Business.Models;
 
 namespace RP.Tests
 {
@@ -9,6 +10,8 @@ namespace RP.Tests
 
         private static ServiceProvider Instance => Provider.Value;
 
-        public static DashboardApiClient DashboardApiClient => Instance.GetService<DashboardApiClient>();
+        public static DashboardApiService DashboardApiService => Instance.GetService<DashboardApiService>();
+
+        public static string ProjectName => Instance.GetService<ApiSettings>().ProjectName;
     }
 }

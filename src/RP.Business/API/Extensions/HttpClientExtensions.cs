@@ -1,7 +1,6 @@
-﻿using System.Text;
-using RP.Core.Helpers;
-
-namespace RP.Core.Helpers
+﻿using RP.Core.Helpers;
+using System.Text;
+namespace RP.Business.API.Extension
 {
     public static class HttpClientExtensions
     {

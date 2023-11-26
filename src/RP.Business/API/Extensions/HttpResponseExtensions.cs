@@ -3,7 +3,7 @@ using RP.Core.Helpers;
 
 namespace RP.Business.API.Extensions
 {
-    public static class HttpResponseExtension
+    public static class HttpResponseExtensions
     {
         public static T GetContentAs<T>(this HttpResponse response)
         {

@@ -1,6 +1,6 @@
-﻿namespace RP.Business.Models
+﻿namespace RP.Business.Config
 {
-    public class ApiSettings
+    public class ApiConfig
     {
         public string Host { get; set; }
 

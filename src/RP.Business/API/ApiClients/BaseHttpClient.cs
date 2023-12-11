@@ -1,5 +1,5 @@
 ﻿using RP.Business.API.Extension;
-using RP.Business.Models;
+using RP.Business.Config;
 using System.Net.Http.Headers;
 
 namespace RP.Business.API.ApiClients
@@ -8,7 +8,7 @@ namespace RP.Business.API.ApiClients
     {
         private readonly HttpClient _httpClient;
 
-        public BaseHttpClient(ApiSettings apiSettings) 
+        public BaseHttpClient(ApiConfig apiSettings) 
         {
             var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(apiSettings.Host);

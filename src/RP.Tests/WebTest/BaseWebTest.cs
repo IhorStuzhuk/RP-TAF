@@ -1,17 +1,12 @@
-﻿using FluentAssertions;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
-using RP.Business.Web.Pages;
 using RP.Business.Web.WebDriver;
 using RP.Business.Web.WebDriver.Utils;
 using RP.Core.Helpers;
-using RP.Tests.nUnit;
 
 namespace RP.Tests.WebTest
 {
-    public class BaseWebTest : BaseNUnitTest
+    public class BaseWebTest
     {
         protected Driver Driver;
         private ScreenshotTaker ScreenshotTaker;
@@ -27,19 +22,18 @@ namespace RP.Tests.WebTest
                 ScreenshotTaker = new(Driver);
 
             Driver.NavigateTo(Configuration.WebConfig.UrlClient);
-            var loginPage = new LoginPage(Driver);
-            loginPage.Login(Configuration.UserConfig);
-            loginPage.IsNotificationText(Messages.SignedInSuccessfully).Should().BeTrue();
         }
 
         [TearDown]
-        public void WebTestTearDown()
+        public async Task WebTestTearDown()
         {
             if(TestContext.CurrentContext.Result.Outcome != ResultState.Success)
             {
                 ScreenshotTaker?.TakeScreenshot(TestContext.CurrentContext.Test.Name + StringHelper.RandomString(10) + ".png");
             }
             Driver.Close();
+
+            await Configuration.DashboardApiService.DeleteAllCreatedDashboards();
         }
     }
 }

@@ -42,6 +42,7 @@ namespace RP.Business.Web.WebDriver
         public void Refresh()
         {
             _driver.Navigate().Refresh();
+            WaitForPageLoad();
         }
 
         public void Close()

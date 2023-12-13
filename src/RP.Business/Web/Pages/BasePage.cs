@@ -1,7 +1,6 @@
 ﻿global using WebElement = RP.Business.Web.Pages.Elements.WebElement;
 using OpenQA.Selenium;
 using RP.Business.Web.WebDriver;
-using RP.Core.Logger;
 using RP.Business.Web.Pages.Elements;
 using SeleniumExtras.WaitHelpers;
 
@@ -13,11 +12,18 @@ namespace RP.Business.Web.Pages
 
         private By Notification => By.XPath("//div[contains(@class, 'notificationItem')]/p");
 
-        public SideBar SideBar => new SideBar(Driver, By.XPath("//*[contains(@class, 'layout__sidebar-container')]"), "SideBar");
+        protected By PopupLocator => By.XPath("//*[contains(@class, 'window-animation-enter-done')]");
+
+        public SideBar SideBar => new(Find(By.XPath("//*[contains(@class, 'layout__sidebar-container')]"), "SideBar"));
 
         public bool IsNotificationText(string text)
         {
             return Driver.Wait.Until(ExpectedConditions.TextToBePresentInElementLocated(Notification, text));
+        }
+
+        public bool WaitTillNotificationBeHidden()
+        {
+            return Driver.Wait.Until(ExpectedConditions.InvisibilityOfElementLocated(Notification));
         }
 
         public BasePage(Driver driver)
@@ -26,30 +32,15 @@ namespace RP.Business.Web.Pages
             Driver.WaitForPageLoad();
         }
 
+        protected WebElement Find(By locator, string name)
+        {
+            return new WebElement(Driver, Driver._driver.FindElement(locator), locator, name);
+        }
+
         protected WebElement WaitAndFind(By locator, string name)
         {
             var element = Driver.Wait.Until(ExpectedConditions.ElementIsVisible(locator));
             return new WebElement(Driver, element, locator, name);
-        }
-
-        protected IEnumerable<WebElement> WaitAndFindMany(By locator)
-        {
-            var elements = Driver.Wait.Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(locator));
-            return elements.Select(el => new WebElement(Driver, el, locator));
-        }
-
-        public bool WaitForElementToBeVisible(By locator)
-        {
-            try
-            {
-                return Driver.Wait.Until(ExpectedConditions.ElementIsVisible(locator)).Displayed
-                    && Driver.Wait.Until(ExpectedConditions.ElementIsVisible(locator)).Enabled;
-            }
-            catch(Exception e)
-            {
-                Logger.Log.Error($"Error occured while waiting for element visibility: {e}");
-                return false;
-            }
         }
     }
 }

@@ -26,6 +26,11 @@
         public static string DashboardHasBeenDeleted => "Dashboard has been deleted";
 
         public static string WidgetHasBeenAdded => "Widget has been added";
+
+        public static string WidgetHasBeenDeleted => "Widget has been deleted";
+
+        public static string ThereAreNoWidgetsOnDashboard => "There are no widgets on this dashboard";
+
         #endregion
     }
 }

@@ -4,9 +4,9 @@ namespace RP.Business.Web.Pages.Elements
 {
     public class WidgetDataForm : WebElement
     {
-        private InputField WidgetNameField => new InputField(Find(By.XPath("//input"), "WidgetNameField"));
+        private InputField WidgetNameField => new(Find(By.XPath("//input"), "WidgetNameField"));
 
-        private InputField WidgetDescriptionField => new InputField(Find(By.XPath("//textarea"), "WidgetDescriptionField"));
+        private InputField WidgetDescriptionField => new(Find(By.XPath("//textarea"), "WidgetDescriptionField"));
 
         public WidgetDataForm(WebElement element) : base(element)
         {

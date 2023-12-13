@@ -8,36 +8,15 @@ namespace RP.Business.Web.Pages.Elements
 {
     public class WebElement
     {
-        public Driver Driver { get; private set; }
+        protected Driver Driver { get; private set; }
 
-        public IWebElement Element { get; private set; }
+        protected IWebElement Element { get; private set; }
 
-        protected string Name { get; set; }
+        protected By Locator { get; private set; }
 
-        public By Locator { get; private set; }
+        private string Name { get; set; }
 
-        public WebElement(Driver driver, By locator, string name)
-        {
-            Driver = driver;
-            Name = name;
-            try
-            {
-                Element = Driver._driver.FindElement(locator);
-            }
-            catch(NullReferenceException ex)
-            {
-                Logger.Log.Error($"The '{name}' was not found by locator {locator}");
-                throw ex;
-            }
-        }
-
-        public WebElement(WebElement element)
-        {
-            Driver = element.Driver;
-            Element = element.Element;
-            Name = element.Name;
-            Locator = element.Locator;
-        }
+        public string Text => Element.Text;
 
         public WebElement(Driver driver, IWebElement element, By locator, string name = "")
         {
@@ -47,20 +26,16 @@ namespace RP.Business.Web.Pages.Elements
             Name = name;
         }
 
-        protected WebElement Find(By locator, string name)
+        public WebElement(WebElement element) : this(element.Driver, element.Element, element.Locator, element.Name)
         {
-            return new WebElement(Driver, Element.FindElement(locator), locator, name);
         }
 
-        protected IReadOnlyCollection<WebElement> FindElements(By locator)
+        protected WebElement Find(By locator, string name) => new WebElement(Driver, Element.FindElement(locator), locator, name);
+
+        protected IEnumerable<WebElement> FindElements(By locator)
         {
-            var collection = new List<WebElement>();
-            foreach(var item in Element.FindElements(locator))
-            {
-                var elem = Driver.Wait.Until(ExpectedConditions.ElementToBeClickable(item));
-                collection.Add(new WebElement(Driver, elem, locator));
-            }
-            return collection;
+            Driver.Wait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(locator));
+            return Element.FindElements(locator).Select(e => new WebElement(Driver, e, locator));
         }
 
         protected WebElement WaitAndFind(By locator, string name)
@@ -69,34 +44,11 @@ namespace RP.Business.Web.Pages.Elements
             return new WebElement(Driver, element, locator, name);
         }
 
-        public WebElement(By locator, string name)
-        {
-            Name = name;
-            try
-            {
-                Element = Element.FindElement(locator);
-            }
-            catch(NullReferenceException ex)
-            {
-                Logger.Log.Error($"The '{name}' was not found by locator {locator}");
-                throw ex;
-            }
-        }
-
-        public string Text => Element.Text;
-
         public void Click()
         {
             Driver.Wait.Until(ExpectedConditions.ElementToBeClickable(Element)).Click();
             Logger.Log.Info($"Clicked on '{Name}'");
             Driver.WaitForPageLoad();
-        }
-
-        public void SendKeys(string text)
-        {
-            Element.Click();
-            Element.SendKeys(text);
-            Logger.Log.Info($"Typing '{text}' into '{Name}'");
         }
 
         #region JSExecutor
@@ -127,14 +79,15 @@ namespace RP.Business.Web.Pages.Elements
             new Actions(Driver._driver).MoveToElement(Element).ClickAndHold().MoveByOffset(xOffset, yOffset).Release().Perform();
         }
 
-        public void DragAndDrop(IWebElement dropTo)
+        public void DragAndDrop(WebElement dropTo)
         {
-            new Actions(Driver._driver).DragAndDrop(Element, dropTo).Perform();
+            new Actions(Driver._driver).MoveToElement(Element).ClickAndHold().MoveToElement(dropTo.Element).Release().Perform();
         }
 
-        public void DragAndDrop(int xOffset, int yOffset)
+        public WebElement Hover()
         {
-            new Actions(Driver._driver).DragAndDropToOffset(Element, xOffset, yOffset).Perform();
+            new Actions(Driver._driver).MoveToElement(Element).Build().Perform();
+            return this;
         }
         #endregion
     }

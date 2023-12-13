@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using RP.Business.Web.WebDriver;
 
 namespace RP.Business.Web.Pages.Elements
 {
@@ -13,7 +12,7 @@ namespace RP.Business.Web.Pages.Elements
             return new DashboardsPage(Driver);
         }
 
-        public SideBar(Driver driver, By locator, string name) : base(driver, locator, name)
+        public SideBar(WebElement element) : base(element)
         {
         }
     }

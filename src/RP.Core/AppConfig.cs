@@ -7,7 +7,7 @@ namespace RP.Core
         private IConfiguration _configuration;
         private static readonly Lazy<AppConfig> lazy = new Lazy<AppConfig>(() => new AppConfig());
 
-        public static IConfiguration Instance { get { return lazy.Value._configuration; } }
+        public static IConfiguration Instance => lazy.Value._configuration;
 
         private AppConfig()
         {

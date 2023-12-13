@@ -8,8 +8,21 @@ using RP.Tests.TestDataProviders;
 
 namespace RP.Tests.WebTest
 {
+    [NonParallelizable]
     public class DashboardWebTests : BaseWebTest
     {
+        private DashboardsPage _dashboardsPage;
+
+        [SetUp]
+        public void SetUp()
+        {
+            var loginPage = new LoginPage(Driver);
+            loginPage.Login(Configuration.UserConfig);
+            loginPage.IsNotificationText(Messages.SignedInSuccessfully).Should().BeTrue();
+
+            _dashboardsPage = new DashboardsPage(Driver);
+        }
+
         [Test]
         public void CreateDashboard()
         {
@@ -20,11 +33,9 @@ namespace RP.Tests.WebTest
                 Owner = Configuration.UserConfig.User
             };
 
-            var dashboardsPage = new DashboardsPage(Driver);
-            dashboardsPage.AddDashboard(dashboard);
-            dashboardsPage.IsNotificationText(Messages.DashboardHasBeenAdded).Should().BeTrue();
-
-            dashboardsPage.SideBar.GoToDashboards().GetDashboards().Should().Contain(dashboard);
+            _dashboardsPage.AddDashboard(dashboard);
+            _dashboardsPage.IsNotificationText(Messages.DashboardHasBeenAdded).Should().BeTrue();
+            _dashboardsPage.SideBar.GoToDashboards().GetDashboards().Should().Contain(dashboard);
         }
 
         [Test]
@@ -32,10 +43,10 @@ namespace RP.Tests.WebTest
         {
             await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
             Driver.Refresh();
-            var dashboardsPage = new DashboardsPage(Driver);
-            dashboardsPage.DeleteDashboard();
-            dashboardsPage.IsNotificationText(Messages.DashboardHasBeenDeleted).Should().BeTrue();
-            dashboardsPage.EmptyDashboardsContainer.YouHaveNoDashboardsLabelText.Should().Be(Messages.YouHaveNoDashboards);
+
+            _dashboardsPage.DeleteDashboard();
+            _dashboardsPage.IsNotificationText(Messages.DashboardHasBeenDeleted).Should().BeTrue();
+            _dashboardsPage.EmptyDashboardsContainer.YouHaveNoDashboardsLabelText.Should().Be(Messages.YouHaveNoDashboards);
         }
 
         [Test]
@@ -52,24 +63,53 @@ namespace RP.Tests.WebTest
                 Owner = Configuration.UserConfig.User
             };
 
-            var dashboardsPage = new DashboardsPage(Driver);
-            dashboardsPage.EditDashboard(addedDashboard.Name, updatedDashboard);
-            dashboardsPage.GetDashboards().Should().Contain(updatedDashboard);
+            _dashboardsPage.EditDashboard(addedDashboard.Name, updatedDashboard);
+            _dashboardsPage.GetDashboards().Should().Contain(updatedDashboard);
         }
 
         [Test]
         public async Task AddWidget()
         {
-            var addedDashboard = DashboardProvider.GetDashboard();
-            await Configuration.DashboardApiService.CreateDashboard(addedDashboard);
+            await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
             Driver.Refresh();
 
             var widgetName = "newWidget";
             var widgetDescription = "widgetDescription";
-            var dashboardsPage = new DashboardsPage(Driver);
-            dashboardsPage.AddWidget(widgetName, widgetDescription);
-            dashboardsPage.IsNotificationText(Messages.WidgetHasBeenAdded).Should().BeTrue();
-            dashboardsPage.GetWidgets().Select(w => w.GetName).Contains("newWidget").Should().BeTrue();
+
+            AddWidget(1, widgetName, widgetDescription);
+            _dashboardsPage.GetWidgetsNames().Contains("newWidget").Should().BeTrue();
+        }
+
+        [Test]
+        public async Task RemoveWidget()
+        {
+            await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
+            Driver.Refresh();
+
+            AddWidget(1);
+            _dashboardsPage.RemoveWidget();
+            _dashboardsPage.IsNotificationText(Messages.WidgetHasBeenDeleted).Should().BeTrue();
+            _dashboardsPage.DashboardDetailedContainer.EmptyWidgetContainer.ThereAreNoWidgetsOnDashboardLabelText.Should().Be(Messages.ThereAreNoWidgetsOnDashboard);
+        }
+
+        [Test]
+        public async Task ChangeWidgetsOrder()
+        {
+            await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
+            Driver.Refresh();
+
+            AddWidget(2);
+            _dashboardsPage.WaitTillNotificationBeHidden();
+            var widgetNames = _dashboardsPage.GetWidgetsNames();
+            _dashboardsPage.ChangeWidgetsOrder(1, 2);
+            _dashboardsPage.GetWidgetsNames().First().Should().Be(widgetNames.Last());
+        }
+
+        private void AddWidget(int amount, string? widgetName = null, string? widgetDescription = null, int dashboard = 0)
+        {
+            for(int i = 1; i <= amount; i++)
+                _dashboardsPage.AddWidget(widgetName ?? StringHelper.RandomString(5), widgetDescription ?? StringHelper.RandomString(5), dashboard, i == 1);
+            _dashboardsPage.IsNotificationText(Messages.WidgetHasBeenAdded).Should().BeTrue();
         }
     }
 }

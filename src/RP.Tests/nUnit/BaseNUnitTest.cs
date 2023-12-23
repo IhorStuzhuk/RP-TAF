@@ -5,6 +5,7 @@
 namespace RP.Tests.nUnit
 {
     [TestFixture]
+    [Category("API")]
     public class BaseNUnitTest
     {
         public BaseNUnitTest() { }

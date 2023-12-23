@@ -6,6 +6,8 @@ using RP.Core.Helpers;
 
 namespace RP.Tests.WebTest
 {
+    [TestFixture]
+    [Category("UI")]
     public class BaseWebTest
     {
         protected Driver Driver;

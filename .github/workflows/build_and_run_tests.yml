@@ -68,6 +68,9 @@ jobs:
           echo "TEST_FILTER=TestCategory=${{ github.event.inputs.category }}" >> $GITHUB_ENV
         fi
 
+    - name: Display initial appsettings.json
+      run: cat src/RP.Tests/appsettings.json
+
     - name: Replace tokens in config files
       run: |
         sed -i "s|{BROWSER_NAME}|${BROWSER_NAME}|" src/RP.Tests/appsettings.json
@@ -85,6 +88,9 @@ jobs:
         API_KEY: ${{ secrets.API_KEY }}
         REPORTING_PROJECT: ${{ secrets.REPORTING_PROJECT }}
         REPORTING_AUTH: ${{ secrets.REPORTING_AUTH }}
+
+    - name: Display updated appsettings.json
+      run: cat src/RP.Tests/appsettings.json
 
     - name: Run tests
       if: success()

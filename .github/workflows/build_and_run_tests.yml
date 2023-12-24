@@ -68,6 +68,15 @@ jobs:
           echo "TEST_FILTER=TestCategory=${{ github.event.inputs.category }}" >> $GITHUB_ENV
         fi
 
+    - name: Replace tokens in config files
+      uses: cschleiden/replace-tokens@v1
+      with:
+        files: |
+          appsettings.json
+          ReportPortal.config.json
+        token_regex: '\${{ secrets\.(\w+) }}|\${{ github\.event\.inputs\.(\w+) }}'
+        preserve_unmatched: false
+
     - name: Run tests
       run: dotnet test src/RP.Tests/RP.Tests.csproj --no-build --filter ${TEST_FILTER} --logger "trx;logfilename=testResults.trx" --results-directory "TestResults"
 

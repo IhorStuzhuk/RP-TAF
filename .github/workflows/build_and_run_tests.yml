@@ -69,19 +69,22 @@ jobs:
         fi
 
     - name: Replace tokens in config files
-      uses: cschleiden/replace-tokens@v1
-      with:
-        tokenPrefix: '{'
-        tokenSuffix: '}'
-        files: 'src/RP.Tests/appsettings.json'
+      run: |
+        sed -i "s|{BROWSER_NAME}|${BROWSER_NAME}|" appsettings.json
+        sed -i "s|{USER_LOGIN}|${USER_LOGIN}|" appsettings.json
+        sed -i "s|{USER_PASSWORD}|${USER_PASSWORD}|" appsettings.json
+        sed -i "s|{USER_PROJECT}|${USER_PROJECT}|" appsettings.json
+        sed -i "s|{API_KEY}|${API_KEY}|" appsettings.json
+        sed -i "s|{REPORTING_PROJECT}|${REPORTING_PROJECT}|" ReportPortal.config.json
+        sed -i "s|{REPORTING_AUTH}|${REPORTING_AUTH}|" ReportPortal.config.json
       env:
         BROWSER_NAME: ${{ github.event.inputs.browser || 'Chrome'}}
         USER_LOGIN: ${{ secrets.USER_LOGIN }}
         USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
         USER_PROJECT: ${{ secrets.USER_PROJECT }}
         API_KEY: ${{ secrets.API_KEY }}
-        #REPORTING_PROJECT: ${{ secrets.REPORTING_PROJECT }}
-        #REPORTING_AUTH: ${{ secrets.REPORTING_AUTH }}
+        REPORTING_PROJECT: ${{ secrets.REPORTING_PROJECT }}
+        REPORTING_AUTH: ${{ secrets.REPORTING_AUTH }}
 
     - name: Run tests
       run: dotnet test src/RP.Tests/RP.Tests.csproj --no-build --filter ${TEST_FILTER} --logger "trx;logfilename=testResults.trx" --results-directory "TestResults"

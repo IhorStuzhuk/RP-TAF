@@ -62,7 +62,7 @@ jobs:
 
     - name: Set TestFilter
       run: |
-        if [ "${{ github.event.inputs.category }}" == "Both" ]; then
+        if [ "${{ github.event.inputs.category || '' }}" ] || [ "${{ github.event.inputs.category }}" == "Both" ]; then
           echo "TEST_FILTER=TestCategory=UI&TestCategory=API" >> $GITHUB_ENV
         else
           echo "TEST_FILTER=TestCategory=${{ github.event.inputs.category }}" >> $GITHUB_ENV
@@ -75,7 +75,7 @@ jobs:
         tokenSuffix: '}'
         files: '["appsettings.json", "ReportPortal.config.json"]'
       env:
-        BROWSER_NAME: ${{ github.event.inputs.browser }}
+        BROWSER_NAME: ${{ github.event.inputs.browser || 'Chrome'}}
         USER_LOGIN: ${{ secrets.USER_LOGIN }}
         USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
         USER_PROJECT: ${{ secrets.USER_PROJECT }}

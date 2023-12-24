@@ -73,15 +73,15 @@ jobs:
       with:
         tokenPrefix: '{'
         tokenSuffix: '}'
-        files: '["appsettings.json", "ReportPortal.config.json"]'
+        files: 'appsettings.json'
       env:
         BROWSER_NAME: ${{ github.event.inputs.browser || 'Chrome'}}
         USER_LOGIN: ${{ secrets.USER_LOGIN }}
         USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
         USER_PROJECT: ${{ secrets.USER_PROJECT }}
         API_KEY: ${{ secrets.API_KEY }}
-        REPORTING_PROJECT: ${{ secrets.REPORTING_PROJECT }}
-        REPORTING_AUTH: ${{ secrets.REPORTING_AUTH }}
+        #REPORTING_PROJECT: ${{ secrets.REPORTING_PROJECT }}
+        #REPORTING_AUTH: ${{ secrets.REPORTING_AUTH }}
 
     - name: Run tests
       run: dotnet test src/RP.Tests/RP.Tests.csproj --no-build --filter ${TEST_FILTER} --logger "trx;logfilename=testResults.trx" --results-directory "TestResults"

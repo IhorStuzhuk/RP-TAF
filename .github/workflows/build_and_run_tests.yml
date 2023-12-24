@@ -29,7 +29,7 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
+    #env:
       ##appsettings.json
       #WebBrowserConfig__BrowserName: ${{ inputs.browser }}
       #UserConfig__User: ${{secrets.USER_LOGIN}}

@@ -73,7 +73,7 @@ jobs:
       with:
         tokenPrefix: '{'
         tokenSuffix: '}'
-        files: 'appsettings.json'
+        files: 'src/RP.Tests/appsettings.json'
       env:
         BROWSER_NAME: ${{ github.event.inputs.browser || 'Chrome'}}
         USER_LOGIN: ${{ secrets.USER_LOGIN }}

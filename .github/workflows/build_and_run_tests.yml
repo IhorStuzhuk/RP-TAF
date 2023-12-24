@@ -30,15 +30,15 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     env:
-      #appsettings.json
-      WebBrowserConfig__BrowserName: ${{ inputs.browser }}
-      UserConfig__User: ${{secrets.USER_LOGIN}}
-      UserConfig__Password: ${{secrets.USER_PASSWORD}}
-      ApiConfig__ProjectName: ${{secrets.USER_PROJECT}}
-      ApiConfig__BearerToken: ${{secrets.API_KEY}}
-      #ReportPortal.config.json
-      server_project: ${{secrets.REPORTING_PROJECT}}
-      server_authentication_uuid: ${{secrets.REPORTING_AUTH}}
+      ##appsettings.json
+      #WebBrowserConfig__BrowserName: ${{ inputs.browser }}
+      #UserConfig__User: ${{secrets.USER_LOGIN}}
+      #UserConfig__Password: ${{secrets.USER_PASSWORD}}
+      #ApiConfig__ProjectName: ${{secrets.USER_PROJECT}}
+      #ApiConfig__BearerToken: ${{secrets.API_KEY}}
+      ##ReportPortal.config.json
+      #server__project: ${{secrets.REPORTING_PROJECT}}
+      #server__authentication__uuid: ${{secrets.REPORTING_AUTH}}
 
     steps:
     - name: Checkout repository

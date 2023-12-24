@@ -3,9 +3,9 @@
   "enabled": true,
   "server": {
     "url": "https://reportportal.epam.com",
-    "project": "",
+    "project": "${{secrets.REPORTING_PROJECT}}",
     "authentication": {
-      "uuid": ""
+      "uuid": "${{secrets.REPORTING_AUTH}}"
     }
   },
   "launch": {

@@ -29,16 +29,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    #env:
-      ##appsettings.json
-      #WebBrowserConfig__BrowserName: ${{ inputs.browser }}
-      #UserConfig__User: ${{secrets.USER_LOGIN}}
-      #UserConfig__Password: ${{secrets.USER_PASSWORD}}
-      #ApiConfig__ProjectName: ${{secrets.USER_PROJECT}}
-      #ApiConfig__BearerToken: ${{secrets.API_KEY}}
-      ##ReportPortal.config.json
-      #server__project: ${{secrets.REPORTING_PROJECT}}
-      #server__authentication__uuid: ${{secrets.REPORTING_AUTH}}
 
     steps:
     - name: Checkout repository
@@ -64,28 +54,21 @@ jobs:
         sed -i "s|{API_KEY}|${{ secrets.API_KEY }}|" src/RP.Tests/appsettings.json
         sed -i "s|{REPORTING_PROJECT}|${{ secrets.REPORTING_PROJECT }}|" src/RP.Tests/ReportPortal.config.json
         sed -i "s|{REPORTING_AUTH}|${{ secrets.REPORTING_AUTH }}|" src/RP.Tests/ReportPortal.config.json
-      #env:
-      #  BROWSER_NAME: ${{ github.event.inputs.browser || 'Chrome'}}
-      #  USER_LOGIN: ${{ secrets.USER_LOGIN }}
-      #  USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
-      #  USER_PROJECT: ${{ secrets.USER_PROJECT }}
-      #  API_KEY: ${{ secrets.API_KEY }}
-      #  REPORTING_PROJECT: ${{ secrets.REPORTING_PROJECT }}
-      #  REPORTING_AUTH: ${{ secrets.REPORTING_AUTH }}
 
     - name: Build
       run: dotnet build src/RP.Testing.sln --no-restore
 
-    - name: Set TestFilter
-      run: |
-        if [ -z "${{ github.event.inputs.category || '' }}" ] || [ "${{ github.event.inputs.category }}" == "Both" ]; then
-          echo "TEST_FILTER=TestCategory=UI|TestCategory=API" >> $GITHUB_ENV
-        else
-          echo "TEST_FILTER=TestCategory=${{ github.event.inputs.category }}" >> $GITHUB_ENV
-        fi
-
     - name: Run tests
-      run: dotnet test src/RP.Tests/RP.Tests.csproj --no-build --filter ${TEST_FILTER} --logger "trx;logfilename=testResults.trx" --results-directory "TestResults"
+      run: |
+          if [ -z "${{ github.event.inputs.category || '' }}" ] || [ "${{ github.event.inputs.category }}" == "Both" ]; then
+            TEST_FILTER="TestCategory=UI|TestCategory=API"
+          else
+            TEST_FILTER="TestCategory=${{ github.event.inputs.category }}"
+          fi
+
+          dotnet test src/RP.Tests/RP.Tests.csproj --no-build --filter $TEST_FILTER --logger "trx;logfilename=testResults.trx" --results-directory "TestResults"
+      env:
+       TEST_FILTER: ${{ env.TEST_FILTER }}
 
     - name: Upload test results
       uses: actions/upload-artifact@v3

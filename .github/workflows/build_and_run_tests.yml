@@ -69,7 +69,7 @@ jobs:
         fi
 
     - name: Run tests
-      run: dotnet test --no-build --filter ${TEST_FILTER} --logger "trx;logfilename=testResults.trx" --results-directory "TestResults-${{ matrix.dotnet-version }}"
+      run: dotnet test src/RP.Tests/RP.Tests.csproj --no-build --filter ${TEST_FILTER} --logger "trx;logfilename=testResults.trx" --results-directory "TestResults"
 
     - name: Upload test results
       uses: actions/upload-artifact@v3

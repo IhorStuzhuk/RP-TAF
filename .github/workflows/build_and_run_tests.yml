@@ -87,7 +87,6 @@ jobs:
         fi
 
     - name: Run tests
-      if: success()
       run: dotnet test src/RP.Tests/RP.Tests.csproj --no-build --filter ${TEST_FILTER} --logger "trx;logfilename=testResults.trx" --results-directory "TestResults"
 
     - name: Upload test results

@@ -57,20 +57,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore src/RP.Testing.sln
 
-    - name: Build
-      run: dotnet build src/RP.Testing.sln --no-restore
-
-    - name: Set TestFilter
-      run: |
-        if [ -z "${{ github.event.inputs.category || '' }}" ] || [ "${{ github.event.inputs.category }}" == "Both" ]; then
-          echo "TEST_FILTER=TestCategory=UI|TestCategory=API" >> $GITHUB_ENV
-        else
-          echo "TEST_FILTER=TestCategory=${{ github.event.inputs.category }}" >> $GITHUB_ENV
-        fi
-
-    - name: Display initial appsettings.json
-      run: cat src/RP.Tests/appsettings.json
-
     - name: Replace tokens in config files
       run: |
         sed -i "s|{BROWSER_NAME}|${BROWSER_NAME}|" src/RP.Tests/appsettings.json
@@ -89,8 +75,16 @@ jobs:
         REPORTING_PROJECT: ${{ secrets.REPORTING_PROJECT }}
         REPORTING_AUTH: ${{ secrets.REPORTING_AUTH }}
 
-    - name: Display updated appsettings.json
-      run: cat src/RP.Tests/appsettings.json
+    - name: Build
+      run: dotnet build src/RP.Testing.sln --no-restore
+
+    - name: Set TestFilter
+      run: |
+        if [ -z "${{ github.event.inputs.category || '' }}" ] || [ "${{ github.event.inputs.category }}" == "Both" ]; then
+          echo "TEST_FILTER=TestCategory=UI|TestCategory=API" >> $GITHUB_ENV
+        else
+          echo "TEST_FILTER=TestCategory=${{ github.event.inputs.category }}" >> $GITHUB_ENV
+        fi
 
     - name: Run tests
       if: success()

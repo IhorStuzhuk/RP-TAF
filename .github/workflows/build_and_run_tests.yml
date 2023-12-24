@@ -70,13 +70,13 @@ jobs:
 
     - name: Replace tokens in config files
       run: |
-        sed -i "s|{BROWSER_NAME}|${BROWSER_NAME}|" appsettings.json
-        sed -i "s|{USER_LOGIN}|${USER_LOGIN}|" appsettings.json
-        sed -i "s|{USER_PASSWORD}|${USER_PASSWORD}|" appsettings.json
-        sed -i "s|{USER_PROJECT}|${USER_PROJECT}|" appsettings.json
-        sed -i "s|{API_KEY}|${API_KEY}|" appsettings.json
-        sed -i "s|{REPORTING_PROJECT}|${REPORTING_PROJECT}|" ReportPortal.config.json
-        sed -i "s|{REPORTING_AUTH}|${REPORTING_AUTH}|" ReportPortal.config.json
+        sed -i "s|{BROWSER_NAME}|${BROWSER_NAME}|" src/RP.Tests/appsettings.json
+        sed -i "s|{USER_LOGIN}|${USER_LOGIN}|" src/RP.Tests/appsettings.json
+        sed -i "s|{USER_PASSWORD}|${USER_PASSWORD}|" src/RP.Tests/appsettings.json
+        sed -i "s|{USER_PROJECT}|${USER_PROJECT}|" src/RP.Tests/appsettings.json
+        sed -i "s|{API_KEY}|${API_KEY}|" src/RP.Tests/appsettings.json
+        sed -i "s|{REPORTING_PROJECT}|${REPORTING_PROJECT}|" src/RP.Tests/ReportPortal.config.json
+        sed -i "s|{REPORTING_AUTH}|${REPORTING_AUTH}|" src/RP.Tests/ReportPortal.config.json
       env:
         BROWSER_NAME: ${{ github.event.inputs.browser || 'Chrome'}}
         USER_LOGIN: ${{ secrets.USER_LOGIN }}

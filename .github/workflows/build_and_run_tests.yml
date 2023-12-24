@@ -71,11 +71,17 @@ jobs:
     - name: Replace tokens in config files
       uses: cschleiden/replace-tokens@v1
       with:
-        files: |
-          appsettings.json
-          ReportPortal.config.json
-        token_regex: '\${{ secrets\.(\w+) }}|\${{ github\.event\.inputs\.(\w+) }}'
-        preserve_unmatched: false
+        tokenPrefix: '{'
+        tokenSuffix: '}'
+        files: '["appsettings.json", "ReportPortal.config.json"]'
+      env:
+        BROWSER_NAME: ${{ github.event.inputs.browser }}
+        USER_LOGIN: ${{ secrets.USER_LOGIN }}
+        USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+        USER_PROJECT: ${{ secrets.USER_PROJECT }}
+        API_KEY: ${{ secrets.API_KEY }}
+        REPORTING_PROJECT: ${{ secrets.REPORTING_PROJECT }}
+        REPORTING_AUTH: ${{ secrets.REPORTING_AUTH }}
 
     - name: Run tests
       run: dotnet test src/RP.Tests/RP.Tests.csproj --no-build --filter ${TEST_FILTER} --logger "trx;logfilename=testResults.trx" --results-directory "TestResults"

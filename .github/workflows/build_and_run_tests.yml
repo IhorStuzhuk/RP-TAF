@@ -62,10 +62,10 @@ jobs:
 
     - name: Set TestFilter
       run: |
-        if [ "${{ inputs.category }}" == "Both" ]; then
+        if [ "${{ github.event.inputs.category }}" == "Both" ]; then
           echo "TEST_FILTER=TestCategory=UI&TestCategory=API" >> $GITHUB_ENV
         else
-          echo "TEST_FILTER=TestCategory=${{ inputs.category }}" >> $GITHUB_ENV
+          echo "TEST_FILTER=TestCategory=${{ github.event.inputs.category }}" >> $GITHUB_ENV
         fi
 
     - name: Run tests

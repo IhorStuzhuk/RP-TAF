@@ -50,9 +50,7 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Install Google Chrome
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
+      uses: browser-actions/setup-chrome@v1
 
     - name: Restore dependencies
       run: dotnet restore src/RP.Testing.sln

@@ -10,7 +10,6 @@ namespace RP.Business.Web.WebDriver
             options.AddArgument("use-fake-device-for-media-stream");
             options.AddArgument("use-fake-ui-for-media-stream");
             options.AddArgument("--ignore-certificate-errors");
-            options.AddArgument("--disable-dev-shm-usage");
         }
     }
 }

@@ -24,6 +24,7 @@ jobs:
       run: dotnet build src/RP.Testing.sln --no-restore
 
   SonarScan:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -38,7 +39,7 @@ jobs:
       - name: Cache SonarCloud packages and SonarCloud scanner
         uses: actions/cache@v2
         with:
-          paths:
+          path: |
             ~/.sonar/cache
             ./.sonar/scanner
           key: ${{ runner.os }}-sonar

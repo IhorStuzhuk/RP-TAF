@@ -21,7 +21,8 @@ on:
         - Chrome
         - Edge
   push:
-    branches: [ "master", "M9_CI-CD" ]
+    branches: 
+     - master
 
   schedule:
     - cron: '0 0 * * *' 

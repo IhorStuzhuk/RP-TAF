@@ -60,13 +60,13 @@ jobs:
 
     - name: Run tests
       run: |
-          if [ -z "${{ github.event.inputs.category || '' }}" ] || [ "${{ github.event.inputs.category }}" == "Both" ]; then
-            TEST_FILTER="TestCategory=UI|TestCategory=API"
-          else
-            TEST_FILTER="TestCategory=${{ github.event.inputs.category }}"
-          fi
-
-          dotnet test src/RP.Tests/RP.Tests.csproj --no-build --filter $TEST_FILTER --logger "trx;logfilename=testResults.trx" --results-directory "TestResults"
+        if [ -z "${{ github.event.inputs.category || '' }}" ] || [ "${{ github.event.inputs.category }}" == "Both" ]; then
+          TEST_FILTER="TestCategory=UI|TestCategory=API"
+        else
+          TEST_FILTER="TestCategory=${{ github.event.inputs.category }}"
+        fi
+        
+        dotnet test src/RP.Tests/RP.Tests.csproj --no-build --filter $TEST_FILTER --logger "trx;logfilename=testResults.trx" --results-directory "TestResults"
       env:
        TEST_FILTER: ${{ env.TEST_FILTER }}
 

@@ -39,7 +39,7 @@ namespace RP.Tests
             services.Configure<ApiConfig>(apiSettingsSection);
             services.AddSingleton<ApiConfig>(p => p.GetRequiredService<IOptions<ApiConfig>>().Value);
 
-            services.AddSingleton<IHttpClientAsync>(new RestSharpClient());//possible to switch to BaseHttpClient
+            services.AddSingleton<IHttpClientAsync>(sp => { return new RestSharpClient(sp.GetRequiredService<ApiConfig>()); });//possible to switch to BaseHttpClient
 
         }
         private void RegisterApiServices(ServiceCollection services)

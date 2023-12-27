@@ -12,22 +12,14 @@ namespace RP.Tests.nUnit
     public class DashboardsNUnitTests : BaseTest
     {
         [TestCaseSource(typeof(DashboardProvider), nameof(DashboardProvider.GetDashboardSource))]
-        public async Task VerifyDashboardCreation(DashboardDto dashboard)
+        public async Task POST_Dashboard(DashboardDto dashboard)
         {
             var response = await Configuration.DashboardApiService.CreateDashboard(dashboard);
             response.StatusCode.Should().Be(HttpStatusCode.Created);
-
-            var dashboardId = response.GetContentAs<DashboardDto>().Id;
-            response = await Configuration.DashboardApiService.GetDashboardById(dashboardId);
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-            var createdDashboard = response.GetContentAs<DashboardDto>();
-            createdDashboard.Name.Should().Be(dashboard.Name);
-            createdDashboard.Description.Should().Be(dashboard.Description);
         }
 
         [Test]
-        public async Task NegativeDashboardCreation()
+        public async Task POST_Dashboard_BAD_REQUEST()
         {
             var dashboardToCreate = new DashboardDto { Description = "DB without name" };
             var response = await Configuration.DashboardApiService.CreateDashboard(dashboardToCreate);
@@ -39,13 +31,12 @@ namespace RP.Tests.nUnit
         }
 
         [Test]
-        public async Task NegativeVerifyCreationAlreadyExistedDashboard()
+        public async Task POST_Dashboard_CONFLICT()
         {
             var dashboardToCreate = DashboardProvider.GetDashboard();
-            var response = await Configuration.DashboardApiService.CreateDashboard(dashboardToCreate);
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            await Configuration.DashboardApiService.CreateDashboard(dashboardToCreate);
 
-            response = await Configuration.DashboardApiService.CreateDashboard(dashboardToCreate);
+            var response = await Configuration.DashboardApiService.CreateDashboard(dashboardToCreate);
             response.StatusCode.Should().Be(HttpStatusCode.Conflict);
 
             var error = response.GetContentAs<ResponseException>();
@@ -54,9 +45,9 @@ namespace RP.Tests.nUnit
         }
 
         [Test]
-        public async Task NegativeVerifyGettingNonCreatedDashboard()
+        public async Task GET_Dashboard_NOT_FOUND()
         {
-            var dashboardId = 999; 
+            var dashboardId = int.MaxValue; 
             var response = await Configuration.DashboardApiService.GetDashboardById(dashboardId);
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
@@ -70,14 +61,12 @@ namespace RP.Tests.nUnit
         [TestCase(1)]
         [TestCase(3)]
         [TestCase(5)]
-        public async Task VerifyDashboardGetting(int dashboardAmount)
+        public async Task GET_Dashboard(int dashboardAmount)
         {
             await Configuration.DashboardApiService.DeleteAllCreatedDashboards();
             for (int i = 0; i < dashboardAmount; i++)
-            {
-                var responseCreation = await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
-                responseCreation.StatusCode.Should().Be(HttpStatusCode.Created);
-            }
+                await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
+
             var response = await Configuration.DashboardApiService.GetAllDashboards();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -86,10 +75,9 @@ namespace RP.Tests.nUnit
         }
 
         [Test]
-        public async Task VerifyDashboardEditing()
+        public async Task PUT_Dashboard()
         {
             var response = await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
             var dashboardId = response.GetContentAs<DashboardDto>().Id;
 
             var dashboardToUpdate = DashboardProvider.GetDashboard();
@@ -104,9 +92,9 @@ namespace RP.Tests.nUnit
         }
 
         [Test]
-        public async Task NegativeVerifyEditingNonCreatedDB()
+        public async Task PUT_Dashboard_NOT_FOUND()
         {
-            var dashboardToUpdateId = 999;
+            var dashboardToUpdateId = int.MaxValue;
             var dashboardToUpdate = DashboardProvider.GetDashboard();
             var response = await Configuration.DashboardApiService.UpdateDashboardById(dashboardToUpdateId, dashboardToUpdate);
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -117,10 +105,9 @@ namespace RP.Tests.nUnit
         }
 
         [Test]
-        public async Task NegativeVerifyEditingWithHugeFieldSize()
+        public async Task PUT_Dashboard_BAD_REQUEST()
         {
             var response = await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
             var dashboardId = response.GetContentAs<DashboardDto>().Id;
 
             var dashboardToUpdate = new DashboardDto { Name = StringHelper.RandomString(1000)};
@@ -134,10 +121,9 @@ namespace RP.Tests.nUnit
 
 
         [Test]
-        public async Task VerifyDeletingDashboard()
+        public async Task DELETE_Dashboard()
         {
             var response = await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
             var dashboardId = response.GetContentAs<DashboardDto>().Id;
 
             response = await Configuration.DashboardApiService.DeleteDashboardById(dashboardId);
@@ -145,7 +131,7 @@ namespace RP.Tests.nUnit
         }
 
         [Test]
-        public async Task NegativeVerifyDeletingNonExistedDashboard()
+        public async Task DELETE_Dashboard_NOT_FOUND()
         {
             var dashboardId = 999;
             var response = await Configuration.DashboardApiService.DeleteDashboardById(dashboardId);

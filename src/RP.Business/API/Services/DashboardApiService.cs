@@ -45,13 +45,12 @@ namespace RP.Business.API.Services
         {
             var response = await GetAllDashboards();
             var dashboards = response.GetContentAs<DashboardResponceDto>().Dashboards;
-            if (dashboards.Count > 0)
-                foreach (var db in dashboards)
-                {
-                    response = await DeleteDashboardById(db.Id);
-                    if (!response.IsSuccessStatusCode())
-                        throw new HttpRequestException($"Dashboard with id: {db.Id} was not deleted");
-                }
+            foreach(var db in dashboards)
+            {
+                response = await DeleteDashboardById(db.Id);
+                if(!response.IsSuccessStatusCode())
+                    throw new HttpRequestException($"Dashboard with id: {db.Id} was not deleted");
+            }
         }
     }
 }

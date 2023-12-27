@@ -2,7 +2,7 @@
 
 namespace RP.Core
 {
-    internal sealed class AppConfig
+    public sealed class AppConfig
     {
         private IConfiguration _configuration;
         private static readonly Lazy<AppConfig> lazy = new Lazy<AppConfig>(() => new AppConfig());

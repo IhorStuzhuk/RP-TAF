@@ -53,6 +53,9 @@ jobs:
         sed -i "s|{USER_PASSWORD}|${{ secrets.USER_PASSWORD }}|" src/RP.Tests/appsettings.json
         sed -i "s|{USER_PROJECT}|${{ secrets.USER_PROJECT }}|" src/RP.Tests/appsettings.json
         sed -i "s|{API_KEY}|${{ secrets.API_KEY }}|" src/RP.Tests/appsettings.json
+        sed -i "s|{JIRA_USER}|${{ secrets.JIRA_USER }}|" src/RP.Tests/appsettings.json
+        sed -i "s|{JIRA_TOKEN}|${{ secrets.JIRA_TOKEN }}|" src/RP.Tests/appsettings.json
+        sed -i "s|{MS_TEAMS_WEBHOOK_URL}|${{ secrets.MS_TEAMS_WEBHOOK_URL }}|" src/RP.Tests/appsettings.json
         sed -i "s|{REPORTING_PROJECT}|${{ secrets.REPORTING_PROJECT }}|" src/RP.Tests/ReportPortal.config.json
         sed -i "s|{REPORTING_AUTH}|${{ secrets.REPORTING_AUTH }}|" src/RP.Tests/ReportPortal.config.json
 

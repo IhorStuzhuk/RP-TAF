@@ -9,7 +9,7 @@ using RP.Business;
 
 namespace RP.Tests.nUnit
 {
-    public class DashboardsNUnitTests : BaseNUnitTest
+    public class DashboardsNUnitTests : BaseTest
     {
         [TestCaseSource(typeof(DashboardProvider), nameof(DashboardProvider.GetDashboardSource))]
         public async Task VerifyDashboardCreation(DashboardDto dashboard)

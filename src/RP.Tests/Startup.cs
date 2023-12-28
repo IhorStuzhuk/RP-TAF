@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RP.Business;
+using RP.Business.API;
 using RP.Business.API.ApiClients;
 using RP.Business.API.Services;
-using RP.Business.Models;
 
 namespace RP.Tests
 {

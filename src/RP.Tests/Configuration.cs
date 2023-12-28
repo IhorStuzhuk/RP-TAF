@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RP.Business.API.Services;
-using RP.Business.Models;
+using RP.Business.API;
 
 namespace RP.Tests
 {

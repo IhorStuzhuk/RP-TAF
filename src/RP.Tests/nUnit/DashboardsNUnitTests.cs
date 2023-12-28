@@ -12,11 +12,11 @@ namespace RP.Tests.nUnit
         [TestCaseSource(typeof(DashboardProvider), nameof(DashboardProvider.GetDashboardSource))]
         public async Task VerifyDashboardCreation(DashboardDto dashboard)
         {
-            var response = await Configuration.DashboardApiClient.CreateDashboard(PROJECT_NAME, dashboard);
+            var response = await Configuration.DashboardApiClient.CreateDashboard(dashboard);
             response.StatusCode.Should().Be(HttpStatusCode.Created);
 
             var dashboardId = response.GetContentAs<DashboardDto>().Id;
-            response = await Configuration.DashboardApiClient.GetDashboardById(PROJECT_NAME, dashboardId);
+            response = await Configuration.DashboardApiClient.GetDashboardById(dashboardId);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var createdDashboard = response.GetContentAs<DashboardDto>();
@@ -25,17 +25,19 @@ namespace RP.Tests.nUnit
         }
 
         [Test]
+        [NonParallelizable]
         [TestCase(1)]
         [TestCase(3)]
         [TestCase(5)]
         public async Task VerifyDashboardGetting(int dashboardAmount)
         {
+            await Configuration.DashboardApiClient.DeleteAllCreatedDashboards();
             for (int i = 0; i < dashboardAmount; i++)
             {
-                var responseCreation = await Configuration.DashboardApiClient.CreateDashboard(PROJECT_NAME, DashboardProvider.GetDashboard());
+                var responseCreation = await Configuration.DashboardApiClient.CreateDashboard(DashboardProvider.GetDashboard());
                 responseCreation.StatusCode.Should().Be(HttpStatusCode.Created);
             }
-            var response = await Configuration.DashboardApiClient.GetAllDashboards(PROJECT_NAME);
+            var response = await Configuration.DashboardApiClient.GetAllDashboards();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var dashboards = response.GetContentAs<DashboardResponceDto>().Dashboards;
@@ -45,15 +47,15 @@ namespace RP.Tests.nUnit
         [Test]
         public async Task VerifyDashboardEditing()
         {
-            var response = await Configuration.DashboardApiClient.CreateDashboard(PROJECT_NAME, DashboardProvider.GetDashboard());
+            var response = await Configuration.DashboardApiClient.CreateDashboard(DashboardProvider.GetDashboard());
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             var dashboardId = response.GetContentAs<DashboardDto>().Id;
 
             var dashboardToUpdate = DashboardProvider.GetDashboard();
-            response = await Configuration.DashboardApiClient.UpdateDashboardById(PROJECT_NAME, dashboardId, dashboardToUpdate);
+            response = await Configuration.DashboardApiClient.UpdateDashboardById(dashboardId, dashboardToUpdate);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            response = await Configuration.DashboardApiClient.GetDashboardById(PROJECT_NAME, dashboardId);
+            response = await Configuration.DashboardApiClient.GetDashboardById( dashboardId);
             var updatedDashboard = response.GetContentAs<DashboardDto>();
 
             updatedDashboard.Name.Should().Be(dashboardToUpdate.Name);

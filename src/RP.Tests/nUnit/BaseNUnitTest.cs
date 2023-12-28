@@ -5,7 +5,7 @@ using RP.Core.Helpers;
 using System.Net;
 
 [assembly: LevelOfParallelism(3)]
-[assembly: Parallelizable(ParallelScope.All)]
+[assembly: Parallelizable(ParallelScope.Children)]
 namespace RP.Tests.nUnit
 {
     [TestFixture]
@@ -15,22 +15,10 @@ namespace RP.Tests.nUnit
 
         public BaseNUnitTest() { }
 
-        [TearDown]
-        public void TearDown()
+        [OneTimeTearDown]
+        public async Task TearDownAsync()
         {
-            DeleteAllCreatedDashboards();
-        }
-
-        protected async void DeleteAllCreatedDashboards()
-        {
-            var response = await Configuration.DashboardApiClient.GetAllDashboards(PROJECT_NAME);
-            var dashboards = response.GetContentAs<DashboardResponceDto>().Dashboards;
-            if(dashboards.Count > 0)
-                foreach(var db in dashboards)
-                {
-                    response = await Configuration.DashboardApiClient.DeleteDashboardById(PROJECT_NAME, db.Id);
-                    response.StatusCode.Should().Be(HttpStatusCode.OK);
-                }
+            await Configuration.DashboardApiClient.DeleteAllCreatedDashboards();
         }
     }
 }

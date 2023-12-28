@@ -16,17 +16,7 @@ namespace RP.Tests.xUnit
             DeleteAllCreatedDashboards();
         }
 
-        private async void DeleteAllCreatedDashboards()
-        {
-            var response = await Configuration.DashboardApiClient.GetAllDashboards(PROJECT_NAME);
-            var dashboards = response.GetContentAs<DashboardResponceDto>().Dashboards;
-            if(dashboards.Count > 0)
-                foreach(var db in dashboards)
-                {
-                    response = await Configuration.DashboardApiClient.DeleteDashboardById(PROJECT_NAME, db.Id);
-                    response.StatusCode.Should().Be(HttpStatusCode.OK);
-                }
-        }
+        private async void DeleteAllCreatedDashboards() => await Configuration.DashboardApiClient.DeleteAllCreatedDashboards();
     }
 }
 

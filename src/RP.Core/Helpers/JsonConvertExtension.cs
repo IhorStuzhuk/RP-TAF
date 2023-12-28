@@ -2,7 +2,7 @@
 
 namespace RP.Core.Helpers
 {
-    internal class JsonConvertExtension
+    public class JsonConvertExtension
     {
         public static T Map<T>(string objString)
         {

@@ -1,10 +1,11 @@
 using FluentAssertions;
 using RP.Business.API;
 using RP.Business.API.Models;
-using RP.Core.Helpers;
+using RP.Business.API.Extensions;
 using System.Net;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using RP.Business.API.Services;
 
 namespace RP.Tests.BDD.Steps
 {
@@ -16,14 +17,14 @@ namespace RP.Tests.BDD.Steps
         public DashboardsStepDefinitions(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
-            _scenarioContext.Set(Configuration.DashboardApiClient, "DashboardApiClient");
+            _scenarioContext.Set(Configuration.DashboardApiService, "DashboardApiService");
         }
 
         [Given(@"I have created dashboard")]
         public async Task GivenIHaveCreatedDashboard(Table table)
         {
             var dashboard = table.CreateInstance<DashboardDto>();
-            var response = await _scenarioContext.Get<DashboardApiClient>("DashboardApiClient").CreateDashboard(dashboard);
+            var response = await _scenarioContext.Get<DashboardApiService>("DashboardApiService").CreateDashboard(dashboard);
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             _scenarioContext.Set(response.GetContentAs<DashboardDto>().Id, "CreatedDBId");
         }
@@ -32,7 +33,7 @@ namespace RP.Tests.BDD.Steps
         public async Task GivenIHaveCreatedDashboard(string name, string description)
         {
             var dashboard = new DashboardDto { Name = name, Description = description };
-            var response = await _scenarioContext.Get<DashboardApiClient>("DashboardApiClient").CreateDashboard(dashboard);
+            var response = await _scenarioContext.Get<DashboardApiService>("DashboardApiService").CreateDashboard(dashboard);
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             _scenarioContext.Set(response.GetContentAs<DashboardDto>().Id, "CreatedDBId");
         }
@@ -43,7 +44,7 @@ namespace RP.Tests.BDD.Steps
             var dashboards = table.CreateSet<DashboardDto>();
             foreach(var db in dashboards)
             {
-                var response = await _scenarioContext.Get<DashboardApiClient>("DashboardApiClient").CreateDashboard(db);
+                var response = await _scenarioContext.Get<DashboardApiService>("DashboardApiService").CreateDashboard(db);
                 response.StatusCode.Should().Be(HttpStatusCode.Created);
             }
         }
@@ -51,13 +52,13 @@ namespace RP.Tests.BDD.Steps
         [Given(@"I do not have any created dashboards")]
         public async Task GivenIDoNotHaveAnyCreatedDashboards()
         {
-            await _scenarioContext.Get<DashboardApiClient>("DashboardApiClient").DeleteAllCreatedDashboards();
+            await _scenarioContext.Get<DashboardApiService>("DashboardApiService").DeleteAllCreatedDashboards();
         }
 
         [When(@"I get created dashboard")]
         public async Task WhenIGetCreatedDashboard()
         {
-            var response = await _scenarioContext.Get<DashboardApiClient>("DashboardApiClient").GetDashboardById(_scenarioContext.Get<int>("CreatedDBId"));
+            var response = await _scenarioContext.Get<DashboardApiService>("DashboardApiService").GetDashboardById(_scenarioContext.Get<int>("CreatedDBId"));
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             _scenarioContext.Set(response.GetContentAs<DashboardDto>(), "CreatedDB");
         }
@@ -65,7 +66,7 @@ namespace RP.Tests.BDD.Steps
         [When(@"I get created dashboards")]
         public async Task WhenIGetCreatedDashboards()
         {
-            var response = await _scenarioContext.Get<DashboardApiClient>("DashboardApiClient").GetAllDashboards();
+            var response = await _scenarioContext.Get<DashboardApiService>("DashboardApiService").GetAllDashboards();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             _scenarioContext.Set(response.GetContentAs<DashboardResponceDto>().Dashboards, "CreatedDBs");
         }
@@ -74,7 +75,7 @@ namespace RP.Tests.BDD.Steps
         public async Task WhenIEditLastCreatedDashboard(Table table)
         {
             var dashboardToUpdate = table.CreateInstance<DashboardDto>();
-            var response = await _scenarioContext.Get<DashboardApiClient>("DashboardApiClient").UpdateDashboardById(_scenarioContext.Get<int>("CreatedDBId"), dashboardToUpdate);
+            var response = await _scenarioContext.Get<DashboardApiService>("DashboardApiService").UpdateDashboardById(_scenarioContext.Get<int>("CreatedDBId"), dashboardToUpdate);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
@@ -83,7 +84,7 @@ namespace RP.Tests.BDD.Steps
         {
             var expectedDashboard = table.CreateInstance<DashboardDto>();
 
-            var response = await _scenarioContext.Get<DashboardApiClient>("DashboardApiClient").GetDashboardById(_scenarioContext.Get<int>("CreatedDBId"));
+            var response = await _scenarioContext.Get<DashboardApiService>("DashboardApiService").GetDashboardById(_scenarioContext.Get<int>("CreatedDBId"));
             var dashboard = response.GetContentAs<DashboardDto>();
 
             dashboard.Name.Should().Be(expectedDashboard.Name);

@@ -18,7 +18,7 @@ namespace RP.Tests.nUnit
         [OneTimeTearDown]
         public async Task TearDownAsync()
         {
-            await Configuration.DashboardApiClient.DeleteAllCreatedDashboards();
+            await Configuration.DashboardApiService.DeleteAllCreatedDashboards();
         }
     }
 }

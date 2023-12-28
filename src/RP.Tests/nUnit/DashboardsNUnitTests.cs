@@ -9,6 +9,7 @@ using RP.Business;
 
 namespace RP.Tests.nUnit
 {
+    [Category("API")]
     public class DashboardsNUnitTests : BaseTest
     {
         [TestCaseSource(typeof(DashboardProvider), nameof(DashboardProvider.GetDashboardSource))]
@@ -108,6 +109,7 @@ namespace RP.Tests.nUnit
         public async Task PUT_Dashboard_BAD_REQUEST()
         {
             var response = await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
             var dashboardId = response.GetContentAs<DashboardDto>().Id;
 
             var dashboardToUpdate = new DashboardDto { Name = StringHelper.RandomString(1000)};

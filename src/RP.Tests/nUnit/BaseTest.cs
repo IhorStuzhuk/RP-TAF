@@ -6,7 +6,6 @@ using NUnit.Framework.Internal;
 namespace RP.Tests.nUnit
 {
     [TestFixture]
-    [Category("API")]
     public class BaseTest
     {
         [OneTimeSetUp]

@@ -10,7 +10,6 @@ using System.Reflection;
 
 namespace RP.Tests.WebTest
 {
-    [TestFixture]
     [Category("UI")]
     public class BaseWebTest : BaseTest
     {

@@ -1,9 +1,4 @@
-﻿using FluentAssertions;
-using RP.Business.API.Models;
-using RP.Core.Helpers;
-using System.Net;
-
-namespace RP.Tests.xUnit
+﻿namespace RP.Tests.xUnit
 {
     public class BaseXUnitTest : IDisposable
     {
@@ -19,4 +14,3 @@ namespace RP.Tests.xUnit
         private async void DeleteAllCreatedDashboards() => await Configuration.DashboardApiService.DeleteAllCreatedDashboards();
     }
 }
-

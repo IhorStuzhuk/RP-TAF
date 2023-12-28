@@ -5,6 +5,8 @@ using RP.Business;
 using RP.Business.API;
 using RP.Business.API.ApiClients;
 using RP.Business.API.Services;
+using RP.Business.Config;
+using RP.Business.Models;
 
 namespace RP.Tests
 {
@@ -24,22 +26,39 @@ namespace RP.Tests
         public ServiceProvider Build()
         {
             var services = new ServiceCollection();
-            RegisterHttpClients(services, Configuration.GetSection("ApiSettings"));
+            RegisterHttpClients(services, Configuration.GetSection("ApiConfig"));
             RegisterApiServices(services);
+            ConfigureDriver(services);
+            ConfigureUser(services);
             return services.BuildServiceProvider();
         }
 
         private void RegisterHttpClients(ServiceCollection services, IConfigurationSection apiSettingsSection)
         {
-            services.Configure<ApiSettings>(apiSettingsSection);
-            services.AddSingleton<ApiSettings>(p => p.GetRequiredService<IOptions<ApiSettings>>().Value);
+            services.Configure<ApiConfig>(apiSettingsSection);
+            services.AddSingleton<ApiConfig>(p => p.GetRequiredService<IOptions<ApiConfig>>().Value);
 
-            services.AddSingleton<IHttpClientAsync>(sp => { return new RestSharpClient(sp.GetRequiredService<ApiSettings>()); });//possible to switch to BaseHttpClient
+            services.AddSingleton<IHttpClientAsync>(sp => { return new RestSharpClient(sp.GetRequiredService<ApiConfig>()); });//possible to switch to BaseHttpClient
 
         }
         private void RegisterApiServices(ServiceCollection services)
         {
-            services.AddTransient<DashboardApiService>(sp => new DashboardApiService(sp.GetRequiredService<IHttpClientAsync>(), sp.GetRequiredService<ApiSettings>()));
+            services.AddTransient<DashboardApiService>(sp => new DashboardApiService(sp.GetRequiredService<IHttpClientAsync>(), sp.GetRequiredService<ApiConfig>()));
+        }
+
+        private void ConfigureDriver(ServiceCollection services)
+        {
+            services.Configure<WebBrowserConfig>(Configuration.GetSection("WebBrowserConfig"));
+            services.Configure<WebConfig>(Configuration.GetSection("WebConfig"));
+
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<WebBrowserConfig>>().Value);
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<WebConfig>>().Value);
+        }
+
+        private void ConfigureUser(ServiceCollection services)
+        {
+            services.Configure<UserConfig>(Configuration.GetSection("UserConfig"));
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<UserConfig>>().Value);
         }
     }
 }

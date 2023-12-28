@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RP.Business.API.Services;
-using RP.Business.API;
+using RP.Business.Config;
+using RP.Business.Models;
 
 namespace RP.Tests
 {
@@ -12,6 +13,12 @@ namespace RP.Tests
 
         public static DashboardApiService DashboardApiService => Instance.GetService<DashboardApiService>();
 
-        public static string ProjectName => Instance.GetService<ApiSettings>().ProjectName;
+        public static string ProjectName => Instance.GetService<ApiConfig>().ProjectName;
+
+        public static WebBrowserConfig WebBrowserConfig => Instance.GetService<WebBrowserConfig>();
+
+        public static WebConfig WebConfig => Instance.GetService<WebConfig>();
+
+        public static UserConfig UserConfig => Instance.GetService<UserConfig>();
     }
 }

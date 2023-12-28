@@ -1,7 +1,7 @@
 ﻿using RP.Business.API.ApiClients;
 using RP.Business.API.Extensions;
 using RP.Business.API.Models;
-using RP.Business.Models;
+using RP.Business.Config;
 
 namespace RP.Business.API.Services
 {
@@ -10,7 +10,7 @@ namespace RP.Business.API.Services
         private readonly IHttpClientAsync _httpClient;
         private readonly string _url;
 
-        public DashboardApiService(IHttpClientAsync httpClient, ApiSettings apiSettings)
+        public DashboardApiService(IHttpClientAsync httpClient, ApiConfig apiSettings)
         {
             _httpClient = httpClient;
             _url = $"/{apiSettings.ProjectName}/dashboard";

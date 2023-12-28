@@ -1,6 +1,4 @@
-﻿using NUnit.Framework.Internal;
-using NUnit.Framework;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 
 namespace RP.Tests.BDD.Hooks
 {

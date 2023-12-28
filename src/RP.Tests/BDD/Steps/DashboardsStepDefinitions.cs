@@ -1,5 +1,4 @@
 using FluentAssertions;
-using RP.Business.API;
 using RP.Business.API.Models;
 using RP.Business.API.Extensions;
 using System.Net;

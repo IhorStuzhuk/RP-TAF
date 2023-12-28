@@ -1,5 +1,5 @@
 ﻿using RestSharp;
-using RP.Business.Models;
+using RP.Business.Config;
 
 namespace RP.Business.API.ApiClients
 {
@@ -7,7 +7,7 @@ namespace RP.Business.API.ApiClients
     {
         private readonly RestClient _restClient;
 
-        public RestSharpClient(ApiSettings apiSettings) 
+        public RestSharpClient(ApiConfig apiSettings) 
         {
             _restClient = new RestClient(apiSettings.Host);
             _restClient.AddDefaultHeader("Content-Type", "application/json");

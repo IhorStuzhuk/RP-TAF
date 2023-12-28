@@ -5,6 +5,7 @@ using RP.Business.API.Extensions;
 using RP.Core.Helpers;
 using RP.Tests.TestDataProviders;
 using System.Net;
+using RP.Business;
 
 namespace RP.Tests.nUnit
 {

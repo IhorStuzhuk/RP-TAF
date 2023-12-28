@@ -1,12 +1,15 @@
-﻿namespace RP.Core.Logger
-{
-    public class Logger
-    {
-        public ITestLogger Log;
+﻿using RP.Core.Logging;
 
-        public Logger(ITestLogger logger)
+namespace RP.Core.Logger
+{
+    public static class Logger
+    {
+        public static ITestLogger Log { get; }
+
+        static Logger()
         {
-            Log = logger;
+            Log = LoggerFactory.GetLogger((LoggerType)Enum.Parse(typeof(LoggerType), 
+                AppConfig.Instance.GetSection("Logger").Value, ignoreCase: true));
         }
     }
 }

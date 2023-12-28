@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using NUnit.Framework.Internal;
 using RP.Business.Web.WebDriver;
 using RP.Business.Web.WebDriver.Utils;
 using RP.Core.Helpers;

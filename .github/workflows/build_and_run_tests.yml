@@ -1,0 +1,82 @@
+name: Build project and run tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      category:
+        description: 'Test category'
+        required: true
+        default: 'Both'
+        type: choice
+        options:
+        - API
+        - UI
+        - Both 
+      browser:
+        description: 'Browser for UI tests'
+        required: false
+        default: 'Chrome'
+        type: choice
+        options:
+        - Chrome
+        - Edge
+  push:
+    branches: 
+     - master
+
+  schedule:
+    - cron: '0 0 * * *' 
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Install Google Chrome
+      uses: browser-actions/setup-chrome@v1
+
+    - name: Restore dependencies
+      run: dotnet restore src/RP.Testing.sln
+
+    - name: Replace tokens in config files
+      run: |
+        sed -i "s|{BROWSER_NAME}|${{ github.event.inputs.browser || 'Chrome'}}|" src/RP.Tests/appsettings.json
+        sed -i "s|{USER_LOGIN}|${{ secrets.USER_LOGIN }}|" src/RP.Tests/appsettings.json
+        sed -i "s|{USER_PASSWORD}|${{ secrets.USER_PASSWORD }}|" src/RP.Tests/appsettings.json
+        sed -i "s|{USER_PROJECT}|${{ secrets.USER_PROJECT }}|" src/RP.Tests/appsettings.json
+        sed -i "s|{API_KEY}|${{ secrets.API_KEY }}|" src/RP.Tests/appsettings.json
+        sed -i "s|{JIRA_USER}|${{ secrets.JIRA_USER }}|" src/RP.Tests/appsettings.json
+        sed -i "s|{JIRA_TOKEN}|${{ secrets.JIRA_TOKEN }}|" src/RP.Tests/appsettings.json
+        sed -i "s|{MS_TEAMS_WEBHOOK_URL}|${{ secrets.MS_TEAMS_WEBHOOK_URL }}|" src/RP.Tests/appsettings.json
+        sed -i "s|{REPORTING_PROJECT}|${{ secrets.REPORTING_PROJECT }}|" src/RP.Tests/ReportPortal.config.json
+        sed -i "s|{REPORTING_AUTH}|${{ secrets.REPORTING_AUTH }}|" src/RP.Tests/ReportPortal.config.json
+
+    - name: Build
+      run: dotnet build src/RP.Testing.sln --no-restore
+
+    - name: Run tests
+      run: |
+        if [ -z "${{ github.event.inputs.category || '' }}" ] || [ "${{ github.event.inputs.category }}" == "Both" ]; then
+          TEST_FILTER="TestCategory=UI|TestCategory=API"
+        else
+          TEST_FILTER="TestCategory=${{ github.event.inputs.category }}"
+        fi
+        
+        dotnet test src/RP.Tests/RP.Tests.csproj --no-build --filter $TEST_FILTER --logger "trx;logfilename=testResults.trx" --results-directory "TestResults"
+      env:
+       TEST_FILTER: ${{ env.TEST_FILTER }}
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: TestResults/testResults.trx
+      if: ${{ always() }}

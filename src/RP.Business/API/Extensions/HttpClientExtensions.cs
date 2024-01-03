@@ -1,5 +1,6 @@
 ﻿using RP.Core.Helpers;
 using System.Text;
+
 namespace RP.Business.API.Extension
 {
     public static class HttpClientExtensions
@@ -19,9 +20,10 @@ namespace RP.Business.API.Extension
             return client.PatchAsync(uri, GetContent(request));
         }
 
-        public static Task<HttpResponseMessage> Get<T>(this HttpClient client, string uri)
+        public static T Get<T>(this HttpClient client, string uri)
         {
-            return client.GetAsync(uri);
+            var response = client.GetAsync(uri).Result.Content.ReadAsStringAsync();
+            return JsonConvertExtension.Map<T>(response.Result);
         }
 
         private static StringContent GetContent<T>(T body)

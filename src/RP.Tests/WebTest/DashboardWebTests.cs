@@ -4,6 +4,7 @@ using RP.Business;
 using RP.Business.Web.Models;
 using RP.Business.Web.Pages;
 using RP.Core.Helpers;
+using RP.Tests.Services.Jira;
 using RP.Tests.TestDataProviders;
 
 namespace RP.Tests.WebTest
@@ -24,6 +25,7 @@ namespace RP.Tests.WebTest
         }
 
         [Test]
+        [TestCaseId("RPTEST-1")]
         public void CreateDashboard()
         {
             var dashboard = new DashboardModel()
@@ -39,6 +41,7 @@ namespace RP.Tests.WebTest
         }
 
         [Test]
+        [TestCaseId("RPTEST-2")]
         public async Task RemoveDashboard()
         {
             await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
@@ -50,6 +53,7 @@ namespace RP.Tests.WebTest
         }
 
         [Test]
+        [TestCaseId("RPTEST-3")]
         public async Task EditDashboard()
         {
             var addedDashboard = DashboardProvider.GetDashboard();
@@ -68,6 +72,7 @@ namespace RP.Tests.WebTest
         }
 
         [Test]
+        [TestCaseId("RPTEST-4")]
         public async Task AddWidget()
         {
             await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
@@ -81,6 +86,7 @@ namespace RP.Tests.WebTest
         }
 
         [Test]
+        [TestCaseId("RPTEST-5")]
         public async Task RemoveWidget()
         {
             await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());
@@ -93,6 +99,7 @@ namespace RP.Tests.WebTest
         }
 
         [Test]
+        [TestCaseId("RPTEST-6")]
         public async Task ChangeWidgetsOrder()
         {
             await Configuration.DashboardApiService.CreateDashboard(DashboardProvider.GetDashboard());

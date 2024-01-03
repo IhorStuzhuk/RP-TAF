@@ -3,9 +3,9 @@
   "enabled": true,
   "server": {
     "url": "https://reportportal.epam.com",
-    "project": "IHOR_STUZHUK_PERSONAL",
+    "project": "{REPORTING_PROJECT}",
     "authentication": {
-      "uuid": "c54486ce-b159-4fd6-a97c-970af78210ea"
+      "uuid": "{REPORTING_AUTH}"
     }
   },
   "launch": {

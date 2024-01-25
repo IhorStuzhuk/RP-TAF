@@ -10,12 +10,10 @@ namespace RP.Business.API.ApiClients
 
         public BaseHttpClient(ApiConfig apiSettings) 
         {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(apiSettings.Host);
-            httpClient.DefaultRequestHeaders.Accept.Clear();
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiSettings.BearerToken);
-            _httpClient = httpClient;
+            _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiSettings.BearerToken);
         }
 
         public async Task<HttpResponse> GetAsync(string url)
